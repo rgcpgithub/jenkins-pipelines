@@ -1,0 +1,40 @@
+---
+# tasks file for pythonrun
+
+- name: Install docker.
+  package:
+    name: docker-ce
+    state: present
+- name: Start docker service
+  service:
+    name: docker
+    state: started
+
+- name: Build Docker image from Dockerfile
+  shell: docker build -t {{image}} .
+  register: docker_output
+- name: shell
+  debug: var=docker_output
+
+
+- name: install the pip in docker
+  shell: pip install docker
+  register: docker
+- name: install
+  debug: var=docker  
+
+- name: run a python container
+  docker_container:
+    name: data1
+    image: "{{image}}"
+    state: started
+    recreate: yes
+    ports:
+    - "{{port}}:5000"
+
+- name: to check the run container
+  shell: docker ps 
+  register: docker_container
+- name: docker_container
+  debug: var=docker_container
+
