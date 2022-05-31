@@ -11,14 +11,14 @@
     state: started
 
 - name: Build Docker image from Dockerfile
-  shell: docker build -t {{image}} .
+  shell: sudo docker build -t {{image}} .
   register: docker_output
 - name: shell
   debug: var=docker_output
 
 
 - name: install the pip in docker
-  shell: pip install docker
+  shell: sudo pip install docker
   register: docker
 - name: install
   debug: var=docker  
@@ -33,7 +33,7 @@
     - "{{port}}:5000"
 
 - name: to check the run container
-  shell: docker ps 
+  shell: sudo docker ps 
   register: docker_container
 - name: docker_container
   debug: var=docker_container
